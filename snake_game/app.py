@@ -380,8 +380,10 @@ class SnakeApp:
         if not self.engine:
             return
         if self.engine.status is GameStatus.FINISHED:
+            if self.screen is not Screen.RESULTS:
+                self.screen = Screen.RESULTS
+                self._print_match_eval_summary()
             self.close_worker()
-            self.screen = Screen.RESULTS
             return
         snake_id = self.engine.active_snake_id
         worker, ready_move = self._worker_state(snake_id)
@@ -401,6 +403,15 @@ class SnakeApp:
         self._perform_ai_move(snake_id)
         if self.engine.status is GameStatus.FINISHED:
             self.screen = Screen.RESULTS
+            self._print_match_eval_summary()
+
+    def _print_match_eval_summary(self) -> None:
+        if not self.engine:
+            return
+        from .metrics import cetak_metrics_game
+        metrics_history = getattr(self, "_current_match_metrics", [])
+        cetak_metrics_game(self.config, self.engine, metrics_history)
+        self._current_match_metrics = []
 
     def _worker_state(self, snake_id: str):
         secondary = self.config.mode is GameMode.AI_VS_AI and snake_id == AI_ID
@@ -441,7 +452,11 @@ class SnakeApp:
             result = ready_move if ready_move is not None else worker.poll()
             if result is None:
                 return
-            direction, rng_state, error = result
+            if len(result) == 4:
+                direction, rng_state, error, metrics = result
+            else:
+                direction, rng_state, error = result
+                metrics = {}
             if error:
                 raise RuntimeError(error)
             if self.engine.status is GameStatus.PAUSED:
@@ -464,6 +479,10 @@ class SnakeApp:
             self.engine.fail_strategy(snake_id, "Strategy attempted a direct reversal.")
             return
         self.engine.step(snake_id, direction)
+        if metrics:
+            if not hasattr(self, "_current_match_metrics"):
+                self._current_match_metrics = []
+            self._current_match_metrics.append(metrics)
 
     def draw(self) -> None:
         self.surface.fill(BACKGROUND)

@@ -15,9 +15,10 @@ def _run(connection, strategy, construct):
                     strategy = strategy()
                     construct = False
                 direction = strategy.choose_move(snapshot, snake_id, rng)
-                connection.send((time.monotonic(), (direction, rng.getstate(), "")))
+                metrics = getattr(strategy, "last_metrics", {})
+                connection.send((time.monotonic(), (direction, rng.getstate(), "", metrics)))
             except Exception as exc:
-                connection.send((time.monotonic(), (None, None, f"{type(exc).__name__}: {exc}")))
+                connection.send((time.monotonic(), (None, None, f"{type(exc).__name__}: {exc}", {})))
     except (EOFError, BrokenPipeError, OSError):
         pass
     finally:

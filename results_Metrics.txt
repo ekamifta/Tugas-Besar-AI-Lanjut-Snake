@@ -1,0 +1,21 @@
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-06 11:30:36
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 20 x 20
+Jumlah Apel   : 5
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Greedy
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 5 (Langkah: 48)
+
+--- PERFORMA ALGORITMA AI ---
+Total Langkah AI    : 48
+Rata-rata Expanded  : 1.0
+Rata-rata Generated : 2.81
+Rata-rata Waktu/Move: 0.062 ms
+-----------------------------
+
