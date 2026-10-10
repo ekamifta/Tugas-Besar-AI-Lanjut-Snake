@@ -276,7 +276,136 @@ class AStarStrategy(MoveStrategy):
                 )
         
         return legal_moves[0]
-    
+        
+@register_strategy("Alpha-Beta")
+class AlphaBetaStrategy(MoveStrategy):
+    DEPTH = 6 
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random
+    ) -> Direction:
+        legal_moves = snapshot.legal_moves_for(snake_id)
+        snake = snapshot.snake(snake_id)
+        if not legal_moves:
+            return snake.direction
+
+        opponent = None
+        for other in snapshot.snakes:
+            if other.snake_id != snake_id:
+                opponent = other
+                break
+
+        # Tanpa lawan (mode Single Player): Alpha-Beta tidak berlaku (tidak
+        # ada pihak yang meminimalkan), jatuh ke langkah paling dekat apel.
+        if opponent is None:
+            if not snapshot.apples:
+                return legal_moves[0]
+            head = snake.body[0]
+
+            def apple_distance(direction):
+                dx, dy = direction.vector
+                nx, ny = head[0] + dx, head[1] + dy
+                return min(abs(nx - ax) + abs(ny - ay) for ax, ay in snapshot.apples)
+
+            best = min(apple_distance(direction) for direction in legal_moves)
+            return rng.choice([d for d in legal_moves if apple_distance(d) == best])
+
+     
+        def simulate(body, direction, apples):
+            dx, dy = direction.vector
+            new_head = (body[0][0] + dx, body[0][1] + dy)
+            if new_head in apples:
+                new_body = (new_head,) + body
+                new_apples = tuple(apple for apple in apples if apple != new_head)
+            else:
+                new_body = (new_head,) + body[:-1]
+                new_apples = apples
+            return new_body, new_apples
+
+        def legal_from(body, last_direction, other_body):
+            options = []
+            for direction in Direction:
+                if len(body) > 1 and direction is last_direction.opposite:
+                    continue  # tidak boleh membalik badan
+                dx, dy = direction.vector
+                new_head = (body[0][0] + dx, body[0][1] + dy)
+                x, y = new_head
+                if not (0 <= x < snapshot.columns and 0 <= y < snapshot.rows):
+                    continue  # menabrak dinding
+                if new_head in body[:-1]:
+                    continue  # menabrak badan sendiri (ekor akan bergerak menjauh)
+                if new_head in other_body:
+                    continue  # menabrak ular lawan
+                options.append(direction)
+            return options
+
+        def evaluate(my_body, opp_body, apples):
+            score = (len(my_body) - len(opp_body)) * 100
+            if apples:
+                head = my_body[0]
+                score -= min(abs(head[0] - ax) + abs(head[1] - ay) for ax, ay in apples)
+            return score
+
+        def alphabeta(my_body, my_dir, opp_body, opp_dir, apples, depth, my_turn, alpha, beta):
+            if my_turn:
+                options = legal_from(my_body, my_dir, opp_body)
+                if not options:
+                    return -10_000  # kita terjebak -> kalah, seburuk mungkin
+                if depth == 0:
+                    return evaluate(my_body, opp_body, apples)
+                value = float("-inf")
+                for direction in options:
+                    new_body, new_apples = simulate(my_body, direction, apples)
+                    child = alphabeta(
+                        new_body, direction, opp_body, opp_dir, new_apples,
+                        depth - 1, False, alpha, beta,
+                    )
+                    if child > value:
+                        value = child
+                    if value > alpha:
+                        alpha = value
+                    if alpha >= beta:
+                        break  # pemangkasan beta: lawan di atas tak akan pernah memilih cabang ini
+                return value
+            else:
+                options = legal_from(opp_body, opp_dir, my_body)
+                if not options:
+                    return 10_000  # lawan terjebak -> kita menang, sebaik mungkin
+                if depth == 0:
+                    return evaluate(my_body, opp_body, apples)
+                value = float("inf")
+                for direction in options:
+                    new_body, new_apples = simulate(opp_body, direction, apples)
+                    child = alphabeta(
+                        my_body, my_dir, new_body, direction, new_apples,
+                        depth - 1, True, alpha, beta,
+                    )
+                    if child < value:
+                        value = child
+                    if value < beta:
+                        beta = value
+                    if alpha >= beta:
+                        break  # pemangkasan alpha: kita di atas tak akan pernah memilih cabang ini
+                return value
+
+        best_score = float("-inf")
+        best_moves = []
+        alpha = float("-inf")
+        beta = float("inf")
+        for direction in legal_moves:
+            new_body, new_apples = simulate(snake.body, direction, snapshot.apples)
+            value = alphabeta(
+                new_body, direction, opponent.body, opponent.direction,
+                new_apples, self.DEPTH - 1, False, alpha, beta,
+            )
+            if value > best_score:
+                best_score = value
+                best_moves = [direction]
+            elif value == best_score:
+                best_moves.append(direction)
+            if best_score > alpha:
+                alpha = best_score
+
+        return rng.choice(best_moves)
 # Assignment template -------------------------------------------------------
 # 1. Copy this class and give it a unique name.
 # 2. Implement choose_move using only the immutable snapshot.
