@@ -197,6 +197,85 @@ class UCSStrategy(MoveStrategy):
             return first_step
 
         return rng.choice(legal)
+@register_strategy("A*")
+class AStarStrategy(MoveStrategy):
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random) -> Direction:
+        legal_moves = snapshot.legal_moves_for(snake_id)
+        snake = snapshot.snake(snake_id)
+        if not legal_moves or not snapshot.apples:
+            return legal_moves[0] if legal_moves else snake.direction
+
+        def manhattan(a, b):
+            return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+        def simulate(body, direction):
+            dx, dy = direction.vector
+            new_head = (body[0][0] + dx, body[0][1] + dy)
+            return new_head, (new_head,) + body[:-1]
+
+        def legal_from(body, last_direction):
+            options = []
+            for direction in Direction:
+                if len(body) > 1 and direction is last_direction.opposite:
+                    continue  # ga boleh membalik badan
+                new_head, _ = simulate(body, direction)
+                x, y = new_head
+                if not (0 <= x < snapshot.columns and 0 <= y < snapshot.rows):
+                    continue  # nabrak dinding
+                if new_head in body[:-1]:
+                    continue  # nabrak badan sendiri (ekor akan bergerak menjauh)
+                if new_head in obstacles:
+                    continue  # nabrak lawan
+                options.append(direction)
+            return options
+
+        obstacles = frozenset(
+            part
+            for other in snapshot.snakes
+            if other.snake_id != snake_id
+            for part in other.body
+        )
+        target = min(snapshot.apples, key=lambda apple: manhattan(snake.body[0], apple))
+
+        counter = 0
+        start_head = snake.body[0]
+        h_start = manhattan(start_head, target)
+        frontier = [(h_start, h_start, counter, start_head, snake.body, ())]
+        visited = set()
+
+        while frontier:
+            best_index = 0
+            for index in range(1, len(frontier)):
+                if frontier[index] < frontier[best_index]:
+                    best_index = index
+            f, h, _, head, body, path = frontier.pop(best_index)
+
+            state = (head, body)
+            if state in visited:
+                continue
+            visited.add(state) 
+            if len(visited) > 5000:
+                break  
+
+            if head == target:
+                return path[0] if path else legal_moves[0]
+
+            current_direction = path[-1] if path else snake.direction
+            g = f - h 
+            for direction in legal_from(body, current_direction):
+                new_head, new_body = simulate(body, direction)
+                if (new_head, new_body) in visited:
+                    continue
+                counter += 1
+                g_new = g + 1                         
+                h_new = manhattan(new_head, target)     
+                f_new = g_new + h_new                
+                frontier.append(
+                    (f_new, h_new, counter, new_head, new_body, path + (direction,))
+                )
+        
+        return legal_moves[0]
     
 # Assignment template -------------------------------------------------------
 # 1. Copy this class and give it a unique name.
