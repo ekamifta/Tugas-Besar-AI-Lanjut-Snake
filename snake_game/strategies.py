@@ -197,6 +197,245 @@ class UCSStrategy(MoveStrategy):
             return first_step
 
         return rng.choice(legal)
+
+@register_strategy("Breadth-First Search")
+class BFSStrategy(MoveStrategy):
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random
+    ) -> Direction:
+        start_time = time.time()
+        legal = snapshot.legal_moves_for(snake_id)
+        snake = snapshot.snake(snake_id)
+        if not legal or not snapshot.apples:
+            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            return snake.direction
+
+        #inisialisasi variabel
+        head_x, head_y = snake.body[0]
+        movement = []
+        queue = []
+        queue.append((head_x, head_y, movement))
+        visited = []
+        visited.append((head_x, head_y))
+
+        expanded = 0
+        generated = 1
+        found_movement = None
+
+        #hanya bisa jalan bila ada yang di queue
+        while len(queue)>0:
+            #cek queue[0]
+            head_x, head_y, movement = queue.pop(0)
+            expanded += 1
+
+            #kalau kepala = apel
+            if (head_x, head_y) in snapshot.apples:
+                found_movement = movement
+                break
+
+            #jalan. +posisi baru --> queue
+            for direction in Direction:
+                if len(movement) == 0 and direction not in legal:
+                    continue
+                dx, dy = direction.vector
+                new_x = head_x + dx
+                new_y = head_y + dy
+                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited:
+                    visited.append((new_x, new_y))
+                    new_movement = movement + [direction]
+                    queue.append((new_x, new_y, new_movement))
+                    generated += 1
+
+        path_length = len(found_movement) if found_movement is not None else 0
+        final_cost = float(path_length)
+
+        waktu_ms = (time.time() - start_time) * 1000
+        self.last_metrics = {
+            "expanded": expanded,
+            "generated": generated,
+            "evaluated": expanded,
+            "path_len": path_length if path_length else 1,
+            "cost": final_cost,
+            "waktu_ms": waktu_ms
+        }
+
+        if found_movement:
+            return found_movement[0]
+        return
+
+@register_strategy("Depth-First Search")
+class DFSStrategy(MoveStrategy):
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random
+    ) -> Direction:
+        start_time = time.time()
+        legal = snapshot.legal_moves_for(snake_id)
+        snake = snapshot.snake(snake_id)
+        if not legal or not snapshot.apples:
+            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            return snake.direction
+
+        #inisialisasi variabel
+        head_x, head_y = snake.body[0]
+        movement = []
+        stack = []
+        stack.append((head_x, head_y, movement))
+        visited = []
+        visited.append((head_x, head_y))
+
+        expanded = 0
+        generated = 1
+        found_movement = None
+
+        #hanya bisa jalan bila ada yang di stack
+        while len(stack)>0:
+            #cek stack terakhir
+            head_x, head_y, movement = stack.pop()
+            expanded += 1
+
+            #kalau kepala = apel
+            if (head_x, head_y) in snapshot.apples:
+                found_movement = movement
+                break
+
+            #jalan. +posisi baru --> stack
+            for direction in Direction:
+                if len(movement) == 0 and direction not in legal:
+                    continue
+                dx, dy = direction.vector
+                new_x = head_x + dx
+                new_y = head_y + dy
+                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited:
+                    visited.append((new_x, new_y))
+                    new_movement = movement + [direction]
+                    stack.append((new_x, new_y, new_movement))
+                    generated += 1
+
+        path_length = len(found_movement) if found_movement is not None else 0
+        final_cost = float(path_length)
+
+        waktu_ms = (time.time() - start_time) * 1000
+        self.last_metrics = {
+            "expanded": expanded,
+            "generated": generated,
+            "evaluated": expanded,
+            "path_len": path_length if path_length else 1,
+            "cost": final_cost,
+            "waktu_ms": waktu_ms
+        }
+
+        if found_movement:
+            return found_movement[0]
+        return snake.direction
+
+
+@register_strategy("Bidirectional Search")
+class BidirectionalStrategy(MoveStrategy):
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random
+    ) -> Direction:
+        start_time = time.time()
+        legal = snapshot.legal_moves_for(snake_id)
+        snake = snapshot.snake(snake_id)
+        if not legal or not snapshot.apples:
+            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            return snake.direction
+
+        head_x, head_y = snake.body[0]
+        apple_x, apple_y = snapshot.apples[0]
+        movement = []
+        queue_snake = []
+        queue_snake.append((head_x, head_y, movement))
+        queue_apple = []
+        queue_apple.append((apple_x, apple_y))
+        visited_snake = []
+        visited_snake.append((head_x, head_y))
+        visited_apple = []
+        visited_apple.append((apple_x, apple_y))
+        apple_depth = {(apple_x, apple_y): 0}  # jarak tiap node ke apel
+
+        expanded = 0
+        generated = 2  # node awal sisi snake + node awal sisi apple
+        target_found = False
+        first_step = None
+        path_length = 0
+
+        #harus ada posisi snake dan apple di queue
+        while len(queue_snake)>0 and len(queue_apple)>0:
+            #cek queue snake[0]
+            head_x, head_y, movement = queue_snake.pop(0)
+            expanded += 1
+
+            #kalau kepala = apple
+            if (head_x, head_y) in visited_apple:
+                target_found = True
+                path_length = len(movement) + apple_depth[(head_x, head_y)]
+                if len(movement) > 0:
+                    first_step = movement[0]
+                break
+
+            #jalan. +posisi baru snake --> queue snake
+            for direction in Direction:
+                if len(movement) == 0 and direction not in legal:
+                    continue
+                dx, dy = direction.vector
+                new_x = head_x + dx
+                new_y = head_y + dy
+                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited_snake:
+                    visited_snake.append((new_x, new_y))
+                    new_movement = movement + [direction]
+                    queue_snake.append((new_x, new_y, new_movement))
+                    generated += 1
+
+            #cek queue apple[0]
+            apple_x, apple_y = queue_apple.pop(0)
+            expanded += 1
+
+            #kalau apel = kepala
+            if (apple_x, apple_y) in visited_snake:
+                for snake_x, snake_y, snake_movement in queue_snake:
+                    if (snake_x, snake_y) == (apple_x, apple_y):
+                        if len(snake_movement) > 0:
+                            target_found = True
+                            first_step = snake_movement[0]
+                            path_length = len(snake_movement) + apple_depth[(apple_x, apple_y)]
+                            break
+                if target_found:
+                    break
+                if (apple_x, apple_y) == (head_x, head_y):
+                    target_found = True
+                    path_length = apple_depth[(apple_x, apple_y)]
+                    break
+
+            #+posisi baru pencarian apple --> queue apple
+            for direction in Direction:
+                dx, dy = direction.vector
+                new_x = apple_x + dx
+                new_y = apple_y + dy
+                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited_apple:
+                    visited_apple.append((new_x, new_y))
+                    apple_depth[(new_x, new_y)] = apple_depth[(apple_x, apple_y)] + 1
+                    queue_apple.append((new_x, new_y))
+                    generated += 1
+
+        final_cost = float(path_length) if target_found else 0.0
+
+        waktu_ms = (time.time() - start_time) * 1000
+        self.last_metrics = {
+            "expanded": expanded,
+            "generated": generated,
+            "evaluated": expanded,
+            "path_len": path_length if path_length else 1,
+            "cost": final_cost,
+            "waktu_ms": waktu_ms
+        }
+
+        if first_step:
+            return first_step
+        return snake.direction
+
+print("aku mau coba push ke github")
+print("mau coba lagi")
     
 # Assignment template -------------------------------------------------------
 # 1. Copy this class and give it a unique name.
