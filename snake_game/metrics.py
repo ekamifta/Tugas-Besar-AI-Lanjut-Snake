@@ -50,6 +50,22 @@ def cetak_metrics_game(config, engine, metrics_history=None):
         laporan.append(f"Rata-rata Generated : {round(total_generated / n, 2)}")
         laporan.append(f"Rata-rata Waktu/Move: {round(total_waktu / n, 3)} ms")
 
+        ab = [m for m in metrics_history if m.get("algoritma") == "Alpha-Beta"]
+        if ab:
+            na = len(ab)
+            ab_gen = sum(m.get("generated", 0) for m in ab)
+            ab_eval = sum(m.get("evaluated", 0) for m in ab)
+            ab_prun = sum(m.get("pruned", 0) for m in ab)
+            ab_waktu = sum(m.get("waktu_ms", 0) for m in ab)
+            laporan.append("\n--- METRICS ALPHA-BETA ---")
+            laporan.append("Algoritma           : Alpha-Beta")
+            laporan.append(f"Depth               : {ab[-1].get('depth', '-')}")
+            laporan.append(f"Total Langkah       : {na}")
+            laporan.append(f"States Generated    : {ab_gen} (rata-rata/move: {round(ab_gen / na, 2)})")
+            laporan.append(f"States Evaluated    : {ab_eval} (rata-rata/move: {round(ab_eval / na, 2)})")
+            laporan.append(f"Pruned Branches     : {ab_prun} (rata-rata/move: {round(ab_prun / na, 2)})")
+            laporan.append(f"Exec Time / Move    : {round(ab_waktu / na, 3)} ms")
+
         laporan.append(f"Success Rate        : {round(success_rate, 2)} %")
         laporan.append(f"Rata-rata Path Length: {round(avg_path_len, 2)}")
         laporan.append(f"Rata-rata Path Cost  : {round(avg_cost, 2)}")
@@ -57,6 +73,22 @@ def cetak_metrics_game(config, engine, metrics_history=None):
     else:
         laporan.append("Belum ada data langkah AI.")
 
+    rekap = cetak_metrics_game.__dict__.setdefault("rekap", {})
+    daftar_ular = list(engine.snakes.items())
+    nama_strategi = [config.strategy_name, getattr(config, "secondary_strategy_name", None)]
+    skor_semua = [s.score for _, s in daftar_ular]
+    skor_max = max(skor_semua)
+    for i, (_, s) in enumerate(daftar_ular):
+        if i < len(nama_strategi) and nama_strategi[i]:
+            menang = 1 if s.score == skor_max and skor_semua.count(skor_max) == 1 else 0
+            r = rekap.setdefault(nama_strategi[i], {"match": 0, "menang": 0, "skor": 0})
+            r["match"] += 1
+            r["menang"] += menang
+            r["skor"] += s.score
+    if config.strategy_name in rekap:
+        r = rekap[config.strategy_name]
+        laporan.append(f"Win Rate ({config.strategy_name}) : {round(r['menang'] / r['match'] * 100, 2)} % dari {r['match']} match")
+        laporan.append(f"Avg Score           : {round(r['skor'] / r['match'], 2)}")
     laporan.append("-----------------------------\n")
 
     isi_teks = "\n".join(laporan)

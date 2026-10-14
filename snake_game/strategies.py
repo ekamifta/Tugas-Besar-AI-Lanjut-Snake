@@ -360,8 +360,9 @@ class AlphaBetaStrategy(MoveStrategy):
             best = min(apple_distance(direction) for direction in legal_moves)
             return rng.choice([d for d in legal_moves if apple_distance(d) == best])
 
-     
+        stat={"generated":0,"evaluated":0,"pruned":0}
         def simulate(body, direction, apples):
+            stat["generated"]+=1
             dx, dy = direction.vector
             new_head = (body[0][0] + dx, body[0][1] + dy)
             if new_head in apples:
@@ -390,6 +391,7 @@ class AlphaBetaStrategy(MoveStrategy):
             return options
 
         def evaluate(my_body, opp_body, apples):
+            stat["evaluated"]+=1
             score = (len(my_body) - len(opp_body)) * 100
             if apples:
                 head = my_body[0]
@@ -415,6 +417,7 @@ class AlphaBetaStrategy(MoveStrategy):
                     if value > alpha:
                         alpha = value
                     if alpha >= beta:
+                        stat["pruned"]+=1
                         break  # pemangkasan beta: lawan di atas tak akan pernah memilih cabang ini
                 return value
             else:
@@ -435,6 +438,7 @@ class AlphaBetaStrategy(MoveStrategy):
                     if value < beta:
                         beta = value
                     if alpha >= beta:
+                        stat["pruned"]+=1
                         break  # pemangkasan alpha: kita di atas tak akan pernah memilih cabang ini
                 return value
 
@@ -455,7 +459,14 @@ class AlphaBetaStrategy(MoveStrategy):
                 best_moves.append(direction)
             if best_score > alpha:
                 alpha = best_score
-
+        
+        self.last_metrics={
+            "algoritma":"Alpha-Beta",
+            "depth":self.DEPTH,
+            "generated": stat["generated"],
+            "evaluated": stat["evaluated"],
+            "pruned": stat["pruned"],
+        }
         return rng.choice(best_moves)
 # Assignment template -------------------------------------------------------
 # 1. Copy this class and give it a unique name.
