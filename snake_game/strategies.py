@@ -465,7 +465,7 @@ class AlphaBetaStrategy(MoveStrategy):
             "depth":self.DEPTH,
             "generated": stat["generated"],
             "evaluated": stat["evaluated"],
-            "pruned": stat["pruned"],
+            "pruned": stat["pruned"], 
         }
         return rng.choice(best_moves)
 # Assignment template -------------------------------------------------------
