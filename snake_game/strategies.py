@@ -201,10 +201,16 @@ class UCSStrategy(MoveStrategy):
 class AStarStrategy(MoveStrategy):
     def choose_move(
         self, snapshot: GameSnapshot, snake_id: str, rng: Random) -> Direction:
+        start_time=time.time()
         legal_moves = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal_moves or not snapshot.apples:
-            return legal_moves[0] if legal_moves else snake.direction
+            self.last_metrics = {                    
+                "expanded": 0, "generated": 0, "evaluated": 0,
+                "path_len": 0, "cost": 0,
+                "waktu_ms": (time.time() - start_time) * 1000,
+        }
+        return legal_moves[0] if legal_moves else snake.direction
 
         def manhattan(a, b):
             return abs(a[0] - b[0]) + abs(a[1] - b[1])
@@ -243,6 +249,12 @@ class AStarStrategy(MoveStrategy):
         h_start = manhattan(start_head, target)
         frontier = [(h_start, h_start, counter, start_head, snake.body, ())]
         visited = set()
+        expanded = 0            
+        generated = 1
+        first_step = None
+        path_length = 0
+        final_cost = 0.0
+
 
         while frontier:
             best_index = 0
@@ -252,6 +264,7 @@ class AStarStrategy(MoveStrategy):
             f, h, _, head, body, path = frontier.pop(best_index)
 
             state = (head, body)
+            expanded += 1
             if state in visited:
                 continue
             visited.add(state) 
@@ -259,7 +272,10 @@ class AStarStrategy(MoveStrategy):
                 break  
 
             if head == target:
-                return path[0] if path else legal_moves[0]
+                final_cost = f - h             
+                path_length = len(path)
+                first_step = path[0] if path else None
+                break
 
             current_direction = path[-1] if path else snake.direction
             g = f - h 
@@ -268,14 +284,26 @@ class AStarStrategy(MoveStrategy):
                 if (new_head, new_body) in visited:
                     continue
                 counter += 1
+                generated +=1
                 g_new = g + 1                         
                 h_new = manhattan(new_head, target)     
                 f_new = g_new + h_new                
                 frontier.append(
                     (f_new, h_new, counter, new_head, new_body, path + (direction,))
                 )
-        
-        return legal_moves[0]
+        waktu_ms = (time.time() - start_time) * 1000
+        self.last_metrics = {
+            "expanded": expanded,
+            "generated": generated,
+            "evaluated": expanded,
+            "path_len": path_length if first_step else 1,
+            "cost": final_cost,
+            "waktu_ms": waktu_ms,
+            }
+        if first_step:
+            return first_step
+        return rng.choice(legal_moves)
+       # return legal_moves[0]
         
 @register_strategy("Alpha-Beta")
 class AlphaBetaStrategy(MoveStrategy):
