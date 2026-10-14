@@ -103,12 +103,6 @@ def cetak_metrics_game(config, engine, metrics_history=None):
                 laporan.append(f"  Number of States Evaluated : {evaluated}")
                 laporan.append(f"  Number of Pruned Branches  : {pruned}")
                 laporan.append(f"  Execution Time             : {waktu:.2f} ms")
-                laporan.append(f"  Search Depth (avg)         : {depth:.1f}")
-
-    else:
-        laporan.append("Belum ada data langkah AI.")
-
-
     laporan.append("-----------------------------\n")
 
     isi_teks = "\n".join(laporan)
