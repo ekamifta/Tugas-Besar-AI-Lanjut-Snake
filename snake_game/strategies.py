@@ -261,7 +261,9 @@ class MinimaxStrategy(MoveStrategy):
     DIST_W = 1
     WIN = 100000       # ASUMSI : harus > SCORE_W * jumlah apel
 
-    def choose_move(self, snapshot, snake_id, rng):
+    def choose_move(
+        self, snapshot: GameSnapshot, snake_id: str, rng: Random
+    ) -> Direction:
         start_time = time.perf_counter()
 
         depth_limit = self.DEPTH_LIMIT
@@ -671,6 +673,7 @@ class AlphaBetaStrategy(MoveStrategy):
     def choose_move(
         self, snapshot: GameSnapshot, snake_id: str, rng: Random
     ) -> Direction:
+        start_time = time.perf_counter()
         legal_moves = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal_moves:
@@ -802,7 +805,7 @@ class AlphaBetaStrategy(MoveStrategy):
             "algorithm": "Alpha-Beta",
             "depth": self.DEPTH,
             "generated": stat["generated"],
-            "evaluated": stat["evaluated"],
+            "evaluated": stat["evaluated"], 
             "pruned": stat["pruned"],
             "waktu_ms": (time.perf_counter() - start_time) * 1000,
         }
@@ -814,7 +817,7 @@ class BFSStrategy(MoveStrategy):
     def choose_move(
         self, snapshot: GameSnapshot, snake_id: str, rng: Random
     ) -> Direction:
-        start_time = time.time()
+        start_time = time.perf_counter()
         legal = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal or not snapshot.apples:

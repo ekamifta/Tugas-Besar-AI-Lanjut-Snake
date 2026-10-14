@@ -567,3 +567,577 @@ Win Rate (A*) : 100.0 % dari 2 match
 Avg Score           : 4.5
 -----------------------------
 
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:18:10
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Greedy
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 2)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 2
+Number of States Generated     : 6
+Total Path Length              : 2
+Total Path Cost                : 1.00
+Total Execution Time           : 0.06 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:18:30
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : A*
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 5)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 20
+Number of States Generated     : 50
+Total Path Length              : 15
+Total Path Cost                : 15.00
+Total Execution Time           : 0.75 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:18:58
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Bidirectional Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 18
+Number of States Generated     : 84
+Total Path Length              : 10
+Total Path Cost                : 10.00
+Total Execution Time           : 0.33 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:19:18
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Depth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 28)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 1250
+Number of States Generated     : 4462
+Total Path Length              : 350
+Total Path Cost                : 350.00
+Total Execution Time           : 24.51 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:19:39
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Breadth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 55
+Number of States Generated     : 216
+Total Path Length              : 10
+Total Path Cost                : 10.00
+Total Execution Time           : 0.68 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:20:00
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : UCS
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 6)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 159
+Number of States Generated     : 602
+Total Path Length              : 21
+Total Path Cost                : 21.00
+Total Execution Time           : 2.06 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:20:21
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : Alpha-Beta
+Strategi 2    : Minimax
+
+--- HASIL MATCH ---
+Alasan Selesai: AI 1 strategy failed.
+Skor AI 1   : -1 (Langkah: 0)
+Skor AI 2   : 0 (Langkah: 0)
+
+--- PERFORMA ALGORITMA AI ---
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:31:36
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Greedy
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 4
+Number of States Generated     : 12
+Total Path Length              : 4
+Total Path Cost                : 6.00
+Total Execution Time           : 0.13 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:31:40
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : A*
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 6)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 27
+Number of States Generated     : 69
+Total Path Length              : 21
+Total Path Cost                : 21.00
+Total Execution Time           : 0.97 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:31:44
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Bidirectional Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 6)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 66
+Number of States Generated     : 273
+Total Path Length              : 21
+Total Path Cost                : 21.00
+Total Execution Time           : 0.74 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:10
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Depth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: Move limit reached.
+Skor AI   : 0 (Langkah: 200)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 0
+Success Rate                   : 0.0%
+Number of States Expanded      : 11352
+Number of States Generated     : 39626
+Total Path Length              : 9024
+Total Path Cost                : 9024.00
+Total Execution Time           : 214.84 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:23
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Breadth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 63
+Number of States Generated     : 245
+Total Path Length              : 10
+Total Path Cost                : 10.00
+Total Execution Time           : 7167938971066.63 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:26
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : UCS
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 1 (Langkah: 1)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 2
+Number of States Generated     : 9
+Total Path Length              : 1
+Total Path Cost                : 1.00
+Total Execution Time           : 0.04 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:38
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Depth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor Human   : 1 (Langkah: 4)
+Skor AI   : 0 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 0
+Success Rate                   : 0.0%
+Number of States Expanded      : 98
+Number of States Generated     : 340
+Total Path Length              : 98
+Total Path Cost                : 98.00
+Total Execution Time           : 1.27 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:45
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Breadth-First Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor Human   : 0 (Langkah: 5)
+Skor AI   : 1 (Langkah: 5)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 92
+Number of States Generated     : 316
+Total Path Length              : 15
+Total Path Cost                : 15.00
+Total Execution Time           : 8959923822589.01 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:32:53
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : UCS
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor Human   : 1 (Langkah: 4)
+Skor AI   : 0 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 0
+Success Rate                   : 0.0%
+Number of States Expanded      : 193
+Number of States Generated     : 679
+Total Path Length              : 26
+Total Path Cost                : 26.00
+Total Execution Time           : 2.04 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:00
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Greedy
+
+--- HASIL MATCH ---
+Alasan Selesai: Human hit the other snake.
+Skor Human   : -1 (Langkah: 4)
+Skor AI   : 0 (Langkah: 4)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 0
+Success Rate                   : 0.0%
+Number of States Expanded      : 4
+Number of States Generated     : 12
+Total Path Length              : 4
+Total Path Cost                : 14.00
+Total Execution Time           : 0.16 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:13
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : A*
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor Human   : 1 (Langkah: 6)
+Skor AI   : 0 (Langkah: 6)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 0
+Success Rate                   : 0.0%
+Number of States Expanded      : 89
+Number of States Generated     : 173
+Total Path Length              : 63
+Total Path Cost                : 63.00
+Total Execution Time           : 2.59 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:18
+Mode Game     : Human vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Bidirectional Search
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor Human   : 0 (Langkah: 2)
+Skor AI   : 1 (Langkah: 2)
+
+--- PERFORMA ALGORITMA AI ---
+Number of Food Items Collected : 1
+Success Rate                   : 100.0%
+Number of States Expanded      : 2
+Number of States Generated     : 14
+Total Path Length              : 3
+Total Path Cost                : 3.00
+Total Execution Time           : 0.09 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:27
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Minimax
+Strategi 2    : Alpha-Beta
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI 1   : 1 (Langkah: 7)
+Skor AI 2   : 0 (Langkah: 7)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Win
+  Final Score                : 1
+  Number of States Generated : 125
+  Number of States Evaluated : 85
+  Number of Pruned Branches  : 0
+  Execution Time             : 1.49 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Lose
+  Final Score                : 0
+  Number of States Generated : 545
+  Number of States Evaluated : 280
+  Number of Pruned Branches  : 157
+  Execution Time             : 9.92 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:33
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 1
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Alpha-Beta
+Strategi 2    : Minimax
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI 1   : 1 (Langkah: 13)
+Skor AI 2   : 0 (Langkah: 13)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Win
+  Final Score                : 1
+  Number of States Generated : 730
+  Number of States Evaluated : 314
+  Number of Pruned Branches  : 253
+  Execution Time             : 17.49 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Lose
+  Final Score                : 0
+  Number of States Generated : 213
+  Number of States Evaluated : 147
+  Number of Pruned Branches  : 0
+  Execution Time             : 2.74 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 20:33:48
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 10
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Alpha-Beta
+Strategi 2    : Minimax
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI 1   : 6 (Langkah: 39)
+Skor AI 2   : 4 (Langkah: 39)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Win
+  Final Score                : 6
+  Number of States Generated : 3937
+  Number of States Evaluated : 2015
+  Number of Pruned Branches  : 881
+  Execution Time             : 101.83 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Lose
+  Final Score                : 4
+  Number of States Generated : 532
+  Number of States Evaluated : 352
+  Number of Pruned Branches  : 0
+  Execution Time             : 10.62 ms
+-----------------------------
+
