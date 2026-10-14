@@ -19,3 +19,45 @@ Rata-rata Generated : 2.81
 Rata-rata Waktu/Move: 0.062 ms
 -----------------------------
 
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 16:34:37
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 20 x 20
+Jumlah Apel   : 5
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : A*
+
+--- HASIL MATCH ---
+Alasan Selesai: Move limit reached.
+Skor AI   : 3 (Langkah: 200)
+
+--- PERFORMA ALGORITMA AI ---
+Belum ada data langkah AI.
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 17:23:13
+Mode Game     : Single Player (AI)
+Ukuran Grid   : 20 x 20
+Jumlah Apel   : 5
+Move Limit    : 200
+Kecepatan     : 4 moves/s
+Strategi      : A*
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI   : 5 (Langkah: 42)
+
+--- PERFORMA ALGORITMA AI ---
+Total Langkah AI    : 42
+Rata-rata Expanded  : 7.86
+Rata-rata Generated : 21.33
+Rata-rata Waktu/Move: 0.654 ms
+Success Rate        : 100.0 %
+Rata-rata Path Length: 6.86
+Rata-rata Path Cost  : 6.86
+-----------------------------
+
