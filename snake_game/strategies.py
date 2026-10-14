@@ -207,10 +207,10 @@ class AStarStrategy(MoveStrategy):
         if not legal_moves or not snapshot.apples:
             self.last_metrics = {                    
                 "expanded": 0, "generated": 0, "evaluated": 0,
-                "path_len": 0, "cost": 0,
+                "path_len": 0, "cost": 0, "success":0,
                 "waktu_ms": (time.time() - start_time) * 1000,
         }
-        return legal_moves[0] if legal_moves else snake.direction
+            return legal_moves[0] if legal_moves else snake.direction
 
         def manhattan(a, b):
             return abs(a[0] - b[0]) + abs(a[1] - b[1])
@@ -242,7 +242,7 @@ class AStarStrategy(MoveStrategy):
             if other.snake_id != snake_id
             for part in other.body
         )
-        target = min(snapshot.apples, key=lambda apple: manhattan(snake.body[0], apple))
+        target = min(snapshot.apples, key=lambda apple: (manhattan(snake.body[0], apple),apple))
 
         counter = 0
         start_head = snake.body[0]
@@ -263,7 +263,7 @@ class AStarStrategy(MoveStrategy):
                     best_index = index
             f, h, _, head, body, path = frontier.pop(best_index)
 
-            state = (head, body)
+            state = head
             expanded += 1
             if state in visited:
                 continue
@@ -281,7 +281,7 @@ class AStarStrategy(MoveStrategy):
             g = f - h 
             for direction in legal_from(body, current_direction):
                 new_head, new_body = simulate(body, direction)
-                if (new_head, new_body) in visited:
+                if new_head in visited:
                     continue
                 counter += 1
                 generated +=1
@@ -293,17 +293,40 @@ class AStarStrategy(MoveStrategy):
                 )
         waktu_ms = (time.time() - start_time) * 1000
         self.last_metrics = {
+            "strategy": "A*",
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
-            "path_len": path_length if first_step else 1,
+            "path_len": path_length,
             "cost": final_cost,
+            "success": 1 if first_step else 0,
             "waktu_ms": waktu_ms,
-            }
+        }
         if first_step:
             return first_step
-        return rng.choice(legal_moves)
-       # return legal_moves[0]
+
+        blocked = obstacles | set(snake.body[:-1])
+
+        def free_space(start):
+            seen = {start}
+            stack = [start]
+            while stack:
+                cx, cy = stack.pop()
+                for ddx, ddy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nxt = (cx + ddx, cy + ddy)
+                    if nxt in seen or nxt in blocked:
+                        continue
+                    if not (0 <= nxt[0] < snapshot.columns and 0 <= nxt[1] < snapshot.rows):
+                        continue
+                    seen.add(nxt)
+                    stack.append(nxt)
+            return len(seen)
+
+        def skor(d):
+            nh = (snake.body[0][0] + d.vector[0], snake.body[0][1] + d.vector[1])
+            return (-free_space(nh), manhattan(nh, target))
+
+        return min(legal_moves, key=skor)
         
 @register_strategy("Alpha-Beta")
 class AlphaBetaStrategy(MoveStrategy):
