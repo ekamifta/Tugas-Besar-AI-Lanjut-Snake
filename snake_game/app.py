@@ -8,7 +8,7 @@ import pygame
 
 from .engine import AI_ID, HUMAN_ID, GameEngine
 from .models import Direction, GameConfig, GameMode, GameStatus
-from .strategies import STRATEGY_REGISTRY, MoveStrategy
+from .strategies import STRATEGY_REGISTRY, SINGLE_PLAYER_STRATEGIES, MULTIPLAYER_STRATEGIES, MoveStrategy
 from .worker import StrategyWorker
 
 WINDOW_SIZE = (1120, 800)
@@ -297,7 +297,18 @@ class SnakeApp:
         if self._hit("mode", pos):
             modes = list(GameMode)
             index = (modes.index(self.config.mode) + 1) % len(modes)
-            self.config = replace(self.config, mode=modes[index])
+            new_mode = modes[index]
+            # Reset strategi ke default yang valid untuk mode baru
+            is_multi = new_mode is GameMode.AI_VS_AI
+            default_p1 = MULTIPLAYER_STRATEGIES[0] if is_multi else SINGLE_PLAYER_STRATEGIES[0]
+            default_p2 = MULTIPLAYER_STRATEGIES[1] if is_multi else MULTIPLAYER_STRATEGIES[0]
+            self.config = replace(
+                self.config,
+                mode=new_mode,
+                strategy_name=default_p1,
+                secondary_strategy_name=default_p2,
+            )
+            self.setup_error = ""
         elif self._hit("rows_minus", pos):
             self.config = replace(self.config, rows=max(10, self.config.rows - 1))
         elif self._hit("rows_plus", pos):
@@ -326,7 +337,11 @@ class SnakeApp:
             self.start_game()
 
     def _cycle_strategy(self, field: str) -> None:
-        names = list(STRATEGY_REGISTRY)
+        # Pilih daftar strategi yang sesuai dengan mode aktif
+        is_multi = self.config.mode is GameMode.AI_VS_AI
+        names = MULTIPLAYER_STRATEGIES if is_multi else SINGLE_PLAYER_STRATEGIES
+        # Filter hanya yang terdaftar di registry (jaga-jaga jika ada yang belum diimplementasi)
+        names = [n for n in names if n in STRATEGY_REGISTRY]
         if not names:
             return
         current = getattr(self.config, field)

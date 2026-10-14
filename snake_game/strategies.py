@@ -43,6 +43,22 @@ def create_strategy(name: str) -> MoveStrategy:
         raise ValueError(f"Unknown strategy: {name}") from exc
 
 
+# Validasi Strategi yang tersedia per mode
+SINGLE_PLAYER_STRATEGIES: list[str] = [
+    "Depth-First Search",
+    "Breadth-First Search",
+    "UCS",
+    "Greedy",
+    "A*",
+    "Bidirectional Search",
+]
+
+MULTIPLAYER_STRATEGIES: list[str] = [
+    "Minimax",
+    "Alpha-Beta",
+]
+
+
 @register_strategy("Safe Random")
 class SafeRandomStrategy(MoveStrategy):
     def choose_move(
@@ -110,7 +126,7 @@ class GreedyStrategy(MoveStrategy):
 
 @register_strategy("UCS")
 class UCSStrategy(MoveStrategy):
-        def choose_move(
+    def choose_move(
         self, snapshot: GameSnapshot, snake_id: str, rng: Random
     ) -> Direction:
 
@@ -122,6 +138,7 @@ class UCSStrategy(MoveStrategy):
         # Tidak ada gerakan legal atau tidak ada apel
         if not legal or not snapshot.apples:
             self.last_metrics = {
+                "snake_id": snake_id,
                 "expanded": 0,
                 "generated": 0,
                 "evaluated": 0,
@@ -221,6 +238,7 @@ class UCSStrategy(MoveStrategy):
 
         # Simpan metrik
         self.last_metrics = {
+            "snake_id": snake_id,
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
@@ -523,6 +541,7 @@ class AStarStrategy(MoveStrategy):
         snake = snapshot.snake(snake_id)
         if not legal_moves or not snapshot.apples:
             self.last_metrics = {                    
+                "snake_id": snake_id,
                 "expanded": 0, "generated": 0, "evaluated": 0,
                 "path_len": 0, "cost": 0, "success":0,
                 "waktu_ms": (time.time() - start_time) * 1000,
@@ -610,6 +629,7 @@ class AStarStrategy(MoveStrategy):
                 )
         waktu_ms = (time.time() - start_time) * 1000
         self.last_metrics = {
+            "snake_id": snake_id,
             "strategy": "A*",
             "expanded": expanded,
             "generated": generated,
@@ -777,12 +797,14 @@ class AlphaBetaStrategy(MoveStrategy):
             if best_score > alpha:
                 alpha = best_score
         
-        self.last_metrics={
-            "algoritma":"Alpha-Beta",
-            "depth":self.DEPTH,
+        self.last_metrics = {
+            "snake_id": snake_id,
+            "algorithm": "Alpha-Beta",
+            "depth": self.DEPTH,
             "generated": stat["generated"],
             "evaluated": stat["evaluated"],
-            "pruned": stat["pruned"], 
+            "pruned": stat["pruned"],
+            "waktu_ms": (time.perf_counter() - start_time) * 1000,
         }
         return rng.choice(best_moves)
 
@@ -796,7 +818,7 @@ class BFSStrategy(MoveStrategy):
         legal = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal or not snapshot.apples:
-            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            self.last_metrics = {"snake_id": snake_id, "expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
             return snake.direction
 
         #inisialisasi variabel
@@ -843,6 +865,7 @@ class BFSStrategy(MoveStrategy):
 
         waktu_ms = (time.time() - start_time) * 1000
         self.last_metrics = {
+            "snake_id": snake_id,
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
@@ -864,7 +887,7 @@ class DFSStrategy(MoveStrategy):
         legal = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal or not snapshot.apples:
-            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            self.last_metrics = {"snake_id": snake_id, "expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
             return snake.direction
 
         #inisialisasi variabel
@@ -910,6 +933,7 @@ class DFSStrategy(MoveStrategy):
 
         waktu_ms = (time.time() - start_time) * 1000
         self.last_metrics = {
+            "snake_id": snake_id,
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
@@ -932,7 +956,7 @@ class BidirectionalStrategy(MoveStrategy):
         legal = snapshot.legal_moves_for(snake_id)
         snake = snapshot.snake(snake_id)
         if not legal or not snapshot.apples:
-            self.last_metrics = {"expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
+            self.last_metrics = {"snake_id": snake_id, "expanded": 0, "generated": 0, "evaluated": 0, "path_len": 0, "cost": 0, "waktu_ms": (time.time() - start_time) * 1000}
             return snake.direction
 
         head_x, head_y = snake.body[0]
@@ -1020,6 +1044,7 @@ class BidirectionalStrategy(MoveStrategy):
 
         waktu_ms = (time.time() - start_time) * 1000
         self.last_metrics = {
+            "snake_id": snake_id,
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,

@@ -47,7 +47,7 @@ class GameConfig:
     apple_count: int = 5
     mode: GameMode = GameMode.SINGLE
     strategy_name: str = "Greedy"
-    secondary_strategy_name: str = "Safe Random"
+    secondary_strategy_name: str = "Alpha-Beta"
 
     def __post_init__(self) -> None:
         if not 10 <= self.rows <= 40 or not 10 <= self.columns <= 40:
