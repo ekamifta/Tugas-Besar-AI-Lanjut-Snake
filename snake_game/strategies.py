@@ -219,14 +219,15 @@ class BFSStrategy(MoveStrategy):
         visited.append((head_x, head_y))
 
         expanded = 0
-        generated = 1
+        generated = 0
         found_movement = None
 
         #hanya bisa jalan bila ada yang di queue
         while len(queue)>0:
             #cek queue[0]
             head_x, head_y, movement = queue.pop(0)
-            expanded += 1
+            if len(movement) > 0:
+                expanded += 1
 
             #kalau kepala = apel
             if (head_x, head_y) in snapshot.apples:
@@ -240,11 +241,13 @@ class BFSStrategy(MoveStrategy):
                 dx, dy = direction.vector
                 new_x = head_x + dx
                 new_y = head_y + dy
-                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited:
+
+                if 0 <= new_x < snapshot.columns and 0 <= new_y < snapshot.rows:
+                    generated += 1
+                if (new_x, new_y) not in visited:
                     visited.append((new_x, new_y))
                     new_movement = movement + [direction]
                     queue.append((new_x, new_y, new_movement))
-                    generated += 1
 
         path_length = len(found_movement) if found_movement is not None else 0
         final_cost = float(path_length)
@@ -254,14 +257,14 @@ class BFSStrategy(MoveStrategy):
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
-            "path_len": path_length if path_length else 1,
+            "path_len": path_length,
             "cost": final_cost,
             "waktu_ms": waktu_ms
         }
 
         if found_movement:
             return found_movement[0]
-        return
+        return snake.direction
 
 @register_strategy("Depth-First Search")
 class DFSStrategy(MoveStrategy):
@@ -284,14 +287,15 @@ class DFSStrategy(MoveStrategy):
         visited.append((head_x, head_y))
 
         expanded = 0
-        generated = 1
+        generated = 0
         found_movement = None
 
         #hanya bisa jalan bila ada yang di stack
         while len(stack)>0:
             #cek stack terakhir
             head_x, head_y, movement = stack.pop()
-            expanded += 1
+            if len(movement) > 0:
+                expanded += 1
 
             #kalau kepala = apel
             if (head_x, head_y) in snapshot.apples:
@@ -305,11 +309,12 @@ class DFSStrategy(MoveStrategy):
                 dx, dy = direction.vector
                 new_x = head_x + dx
                 new_y = head_y + dy
-                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited:
-                    visited.append((new_x, new_y))
-                    new_movement = movement + [direction]
-                    stack.append((new_x, new_y, new_movement))
+                if 0 <= new_x < snapshot.columns and 0 <= new_y < snapshot.rows:
                     generated += 1
+                    if (new_x, new_y) not in visited:
+                        visited.append((new_x, new_y))
+                        new_movement = movement + [direction]
+                        stack.append((new_x, new_y, new_movement))
 
         path_length = len(found_movement) if found_movement is not None else 0
         final_cost = float(path_length)
@@ -319,7 +324,7 @@ class DFSStrategy(MoveStrategy):
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
-            "path_len": path_length if path_length else 1,
+            "path_len": path_length,
             "cost": final_cost,
             "waktu_ms": waktu_ms
         }
@@ -355,7 +360,7 @@ class BidirectionalStrategy(MoveStrategy):
         apple_depth = {(apple_x, apple_y): 0}  # jarak tiap node ke apel
 
         expanded = 0
-        generated = 2  # node awal sisi snake + node awal sisi apple
+        generated = 0
         target_found = False
         first_step = None
         path_length = 0
@@ -364,7 +369,8 @@ class BidirectionalStrategy(MoveStrategy):
         while len(queue_snake)>0 and len(queue_apple)>0:
             #cek queue snake[0]
             head_x, head_y, movement = queue_snake.pop(0)
-            expanded += 1
+            if len(movement) > 0:
+                expanded += 1
 
             #kalau kepala = apple
             if (head_x, head_y) in visited_apple:
@@ -381,15 +387,17 @@ class BidirectionalStrategy(MoveStrategy):
                 dx, dy = direction.vector
                 new_x = head_x + dx
                 new_y = head_y + dy
-                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited_snake:
-                    visited_snake.append((new_x, new_y))
-                    new_movement = movement + [direction]
-                    queue_snake.append((new_x, new_y, new_movement))
+                if (0 <= new_x < snapshot.columns and 0 <= new_y < snapshot.rows):
                     generated += 1
+                    if (new_x, new_y) not in visited_snake:
+                        visited_snake.append((new_x, new_y))
+                        new_movement = movement + [direction]
+                        queue_snake.append((new_x, new_y, new_movement))
 
             #cek queue apple[0]
             apple_x, apple_y = queue_apple.pop(0)
-            expanded += 1
+            if apple_depth[(apple_x, apple_y)] > 0:
+                expanded += 1
 
             #kalau apel = kepala
             if (apple_x, apple_y) in visited_snake:
@@ -412,11 +420,12 @@ class BidirectionalStrategy(MoveStrategy):
                 dx, dy = direction.vector
                 new_x = apple_x + dx
                 new_y = apple_y + dy
-                if new_x >= 0 and new_x < snapshot.columns and new_y >= 0 and new_y < snapshot.rows and (new_x, new_y) not in visited_apple:
-                    visited_apple.append((new_x, new_y))
-                    apple_depth[(new_x, new_y)] = apple_depth[(apple_x, apple_y)] + 1
-                    queue_apple.append((new_x, new_y))
+                if 0 <= new_x < snapshot.columns and 0 <= new_y < snapshot.rows:
                     generated += 1
+                    if (new_x, new_y) not in visited_apple:
+                        visited_apple.append((new_x, new_y))
+                        apple_depth[(new_x, new_y)] = apple_depth[(apple_x, apple_y)] + 1
+                        queue_apple.append((new_x, new_y))
 
         final_cost = float(path_length) if target_found else 0.0
 
@@ -425,7 +434,7 @@ class BidirectionalStrategy(MoveStrategy):
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
-            "path_len": path_length if path_length else 1,
+            "path_len": path_length,
             "cost": final_cost,
             "waktu_ms": waktu_ms
         }
