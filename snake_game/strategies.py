@@ -158,7 +158,7 @@ class UCSStrategy(MoveStrategy):
             for part in s.body
         }
 
-        # Frontier Agenda): (biaya kumulatif, posisi)
+        # Frontier (Agenda): (biaya kumulatif, posisi)
         agenda = [(0, start)]
 
         # Biaya terbaik yang diketahui untuk setiap posisi
@@ -167,12 +167,15 @@ class UCSStrategy(MoveStrategy):
         # Parent untuk merekonstruksi jalur
         parent = {}
 
+        # Set untuk melacak node yang sudah di-expand (opsional untuk rekam jejak)
+        closed_set = set()
+
         target = None
         expanded = 0
-        generated = 0  # Root tidak dihitung
+        generated = 0  
 
         while agenda:
-            # Ambil state dengan biaya terkecil
+            # Ambil state dengan biaya terkecil dari list manual
             min_index = 0
             for i in range(1, len(agenda)):
                 if agenda[i][0] < agenda[min_index][0]:
@@ -180,18 +183,19 @@ class UCSStrategy(MoveStrategy):
 
             cost, pos = agenda.pop(min_index)
 
-            # Abaikan entri yang sudah tidak optimal
-            if cost > best[pos]:
+            # Jika posisi sudah pernah diexpand dengan biaya lebih baik atau sama, lewati
+            if pos in closed_set and cost > best.get(pos, float('inf')):
                 continue
 
-            # Goal test: goal tidak dihitung sebagai expanded
+            # Goal test
             if pos in apples:
                 target = pos
                 break
 
             # Initial state tidak dihitung sebagai expanded
-            if pos != start:
+            if pos != start and pos not in closed_set:
                 expanded += 1
+                closed_set.add(pos)
 
             x, y = pos
 
@@ -206,16 +210,14 @@ class UCSStrategy(MoveStrategy):
                 ):
                     continue
 
-                # Periksa obstacle
+                # Periksa obstacle (tubuh ular)
                 if nxt in obstacles:
                     continue
-
-                # Semua successor legal dihitung, termasuk posisi yang sudah ditemukan
+                
                 generated += 1
-
                 new_cost = cost + 1
 
-                # Perbarui hanya jika biaya lebih baik
+                # Perbarui hanya jika belum ada atau ditemukan biaya yang lebih baik
                 if nxt not in best or new_cost < best[nxt]:
                     best[nxt] = new_cost
                     parent[nxt] = (pos, direction)
@@ -223,18 +225,21 @@ class UCSStrategy(MoveStrategy):
 
         # Rekonstruksi jalur solusi
         first_step = None
-        path_len = 0
-        final_cost = 0
+        # path_len = 0
+        # final_cost = 0
 
         if target is not None:
-            final_cost = best[target]
+            # final_cost = best[target]
             cur = target
 
             while cur in parent:
                 prev_pos, move_direction = parent[cur]
                 first_step = move_direction
                 cur = prev_pos
-                path_len += 1
+                # path_len += 1
+        
+        # Langkah dihitung hanya jika benar-benar dijalankan
+        executed = first_step is not None and first_step in legal
 
         # Simpan metrik
         self.last_metrics = {
@@ -242,13 +247,16 @@ class UCSStrategy(MoveStrategy):
             "expanded": expanded,
             "generated": generated,
             "evaluated": expanded,
-            "path_len": path_len if target is not None else 0,
-            "cost": final_cost,
+            # "path_len": path_len if target is not None else 0,
+            # "cost": final_cost,
+            "path_len": 1 if executed else 0,
+            "cost": 1 if executed else 0, 
             "waktu_ms": (time.perf_counter() - start_time) * 1000,
         }
 
         # Jalankan langkah pertama jika valid
-        if first_step is not None and first_step in legal:
+        # if first_step is not None and first_step in legal:
+        if executed:
             return first_step
 
         # Fallback jika jalur tidak ditemukan
@@ -275,6 +283,7 @@ class MinimaxStrategy(MoveStrategy):
         evaluated = 0
 
         def simpan_metrics(first_step=None, cost=0):
+            executed = first_step is not None
             self.last_metrics = {
                 "algorithm": "Minimax",
                 "snake_id": snake_id,
@@ -283,8 +292,10 @@ class MinimaxStrategy(MoveStrategy):
                 "evaluated": evaluated,
                 "pruned_branches": 0,
                 "search_depth": depth_limit,
-                "path_len": 1 if first_step is not None else 0,
-                "cost": cost,
+                # "path_len": 1 if first_step is not None else 0,
+                # "cost": cost,
+                "path_len": 1 if executed else 0,
+                "cost": 1 if executed else 0, 
                 "waktu_ms": (
                     time.perf_counter() - start_time) * 1000,
             }
