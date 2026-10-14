@@ -40,10 +40,20 @@ def cetak_metrics_game(config, engine, metrics_history=None):
         total_generated = sum(m.get("generated", 0) for m in metrics_history)
         total_waktu = sum(m.get("waktu_ms", 0) for m in metrics_history)
 
+        sukses = [m for m in metrics_history if m.get("success", 0) == 1]
+        success_rate = len(sukses) / n * 100
+        avg_path_len = sum(m["path_len"] for m in sukses) / len(sukses) if sukses else 0
+        avg_cost = sum(m["cost"] for m in sukses) / len(sukses) if sukses else 0
+
         laporan.append(f"Total Langkah AI    : {n}")
         laporan.append(f"Rata-rata Expanded  : {round(total_expanded / n, 2)}")
         laporan.append(f"Rata-rata Generated : {round(total_generated / n, 2)}")
         laporan.append(f"Rata-rata Waktu/Move: {round(total_waktu / n, 3)} ms")
+
+        laporan.append(f"Success Rate        : {round(success_rate, 2)} %")
+        laporan.append(f"Rata-rata Path Length: {round(avg_path_len, 2)}")
+        laporan.append(f"Rata-rata Path Cost  : {round(avg_cost, 2)}")
+
     else:
         laporan.append("Belum ada data langkah AI.")
 
