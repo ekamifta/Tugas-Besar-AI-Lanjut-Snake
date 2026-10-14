@@ -256,7 +256,7 @@ class UCSStrategy(MoveStrategy):
 
 @register_strategy("Minimax")
 class MinimaxStrategy(MoveStrategy):
-    DEPTH_LIMIT = 3
+    DEPTH_LIMIT = 6
     SCORE_W = 1000     # ASUMSI : harus > DIST_W * (rows + cols), supaya makan apel selalu menang
     DIST_W = 1
     WIN = 100000       # ASUMSI : harus > SCORE_W * jumlah apel

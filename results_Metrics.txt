@@ -1141,3 +1141,120 @@ Skor AI 2   : 4 (Langkah: 39)
   Execution Time             : 10.62 ms
 -----------------------------
 
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 21:48:57
+Mode Game     : AI vs AI
+Ukuran Grid   : 20 x 20
+Jumlah Apel   : 20
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Minimax
+Strategi 2    : Alpha-Beta
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI 1   : 10 (Langkah: 145)
+Skor AI 2   : 10 (Langkah: 145)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Draw
+  Final Score                : 10
+  Number of States Generated : 44247
+  Number of States Evaluated : 28080
+  Number of Pruned Branches  : 0
+  Execution Time             : 691.11 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Draw
+  Final Score                : 10
+  Number of States Generated : 11877
+  Number of States Evaluated : 5586
+  Number of Pruned Branches  : 3371
+  Execution Time             : 337.28 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 21:49:19
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 20
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Minimax
+Strategi 2    : Alpha-Beta
+
+--- HASIL MATCH ---
+Alasan Selesai: All apples were eaten.
+Skor AI 1   : 11 (Langkah: 68)
+Skor AI 2   : 9 (Langkah: 68)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Win
+  Final Score                : 11
+  Number of States Generated : 13792
+  Number of States Evaluated : 8369
+  Number of Pruned Branches  : 0
+  Execution Time             : 235.62 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Lose
+  Final Score                : 9
+  Number of States Generated : 4612
+  Number of States Evaluated : 2122
+  Number of Pruned Branches  : 1268
+  Execution Time             : 132.05 ms
+-----------------------------
+
+
+--- LAPORAN METRICS GAME ---
+Waktu Selesai : 2026-10-14 21:49:37
+Mode Game     : AI vs AI
+Ukuran Grid   : 10 x 10
+Jumlah Apel   : 20
+Move Limit    : 200
+Kecepatan     : 10 moves/s
+Strategi      : Minimax
+Strategi 2    : Alpha-Beta
+
+--- HASIL MATCH ---
+Alasan Selesai: AI 2 hit the other snake.
+Skor AI 1   : 9 (Langkah: 58)
+Skor AI 2   : 9 (Langkah: 58)
+
+--- PERFORMA ALGORITMA AI ---
+
+  [AI 1]
+  Snake ID                   : A1
+  Algorithm                  : Minimax
+  Win/Lose/Draw              : Win
+  Final Score                : 9
+  Number of States Generated : 11287
+  Number of States Evaluated : 6848
+  Number of Pruned Branches  : 0
+  Execution Time             : 197.37 ms
+
+  [AI 2]
+  Snake ID                   : A2
+  Algorithm                  : Alpha-Beta
+  Win/Lose/Draw              : Lose
+  Final Score                : 9
+  Number of States Generated : 3838
+  Number of States Evaluated : 1764
+  Number of Pruned Branches  : 1049
+  Execution Time             : 106.33 ms
+-----------------------------
+
